@@ -47,7 +47,7 @@ const App: React.FC = () => {
       <div className="min-h-screen bg-slate-900 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-slate-400 font-hindi">Shubh Aarambh (2026)...</p>
+          <p className="text-slate-400 font-hindi">Shubh Aarambh...</p>
         </div>
       </div>
     );
@@ -95,7 +95,7 @@ const App: React.FC = () => {
         {activeSection !== 'landing' && <CommunityWall />}
 
         <footer className="text-center text-slate-600 mt-12 pb-6 pt-8 border-t border-slate-800/50">
-          <p className="text-xs uppercase tracking-widest font-bold">Divya Drishti AI © 2026</p>
+          <p className="text-xs uppercase tracking-widest font-bold">Divya Drishti AI © {new Date().getFullYear()}</p>
           <p className="font-hindi text-indigo-500/70 mt-1 text-sm">Made by Anish</p>
         </footer>
       </div>

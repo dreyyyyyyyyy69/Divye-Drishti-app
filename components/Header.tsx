@@ -160,7 +160,7 @@ export const Header: React.FC<HeaderProps> = ({ activeSection, setActiveSection,
 
       <div className="text-center mb-6 cursor-pointer" onClick={() => setActiveSection('landing')}>
         <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-indigo-400 to-indigo-600 font-hindi tracking-tight">दिव्य दृष्टि AI</h1>
-        <p className="mt-1 text-slate-500 uppercase tracking-widest text-[8px] sm:text-[10px] font-bold">Personalized Destiny Portal 2026</p>
+        <p className="mt-1 text-slate-500 uppercase tracking-widest text-[8px] sm:text-[10px] font-bold">Personalized Destiny Portal {new Date().getFullYear()}</p>
       </div>
       
       {activeSection !== 'landing' && (

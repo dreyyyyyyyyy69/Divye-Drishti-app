@@ -140,7 +140,7 @@ export const MahaKundali: React.FC<MahaKundaliProps> = ({ onBack, language }) =>
 
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-            <MaskedInputField label="Aapka Naam" name="name" value={details.name} onChange={handleChange} placeholder="Anish Kumar" />
+            <MaskedInputField label="Aapka Naam" name="name" value={details.name} onChange={handleChange} placeholder="" />
             <div>
               <label className="block text-xs font-medium text-slate-400 font-hindi mb-1">Ling (Gender)</label>
               <select name="gender" value={details.gender} onChange={handleChange} className="block w-full bg-slate-900 border border-slate-700 rounded-xl py-2 px-3 text-sm text-slate-200 outline-none" required>
@@ -154,7 +154,7 @@ export const MahaKundali: React.FC<MahaKundaliProps> = ({ onBack, language }) =>
             <MaskedInputField label="Janam Tarikh" name="dob" value={details.dob} onChange={handleChange} type="date" />
             <MaskedInputField label="Janam Samay" name="tob" value={details.tob} onChange={handleChange} type="time" />
           </div>
-          <MaskedInputField label="City" name="pob" value={details.pob} onChange={handleChange} placeholder="Bokaro, Jharkhand" />
+          <MaskedInputField label="City" name="pob" value={details.pob} onChange={handleChange} placeholder="" />
           
           <div className="flex gap-2">
             <button type="submit" disabled={isLoading} className="flex-1 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white font-bold py-3 sm:py-4 rounded-2xl shadow-xl transition-all disabled:opacity-50 text-sm">

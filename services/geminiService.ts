@@ -2,15 +2,20 @@
 import { GoogleGenAI } from "@google/genai";
 import type { KundaliDetails, MahaKundaliDetails, Language } from '../types';
 
-// Switching everything to Flash for APK stability and high rate limits
+// Using dynamic real-time date context instead of hardcoded 2026 date
+const getCurrentDateContext = () => {
+  const now = new Date();
+  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+  const dateStr = now.toLocaleDateString('en-US', options);
+  return `Current Date: ${dateStr}. System time is synchronized with the user's real-time clock. Always use this current date for age and transit calculations.`;
+};
+
 const PALMISTRY_MODEL = 'gemini-3-flash-preview';
 const KUNDALI_MODEL = 'gemini-3-flash-preview';
 const BNN_MODEL = 'gemini-3-flash-preview';
 const SUMMARY_MODEL = 'gemini-3-flash-preview';
 const CHAT_MODEL = 'gemini-3-flash-preview';
 const MAHA_KUNDALI_MODEL = 'gemini-3-flash-preview';
-
-const CURRENT_DATE_CONTEXT = "Current Date: February 7, 2026. Always treat the current year as 2026.";
 
 export const getActiveApiKey = () => {
   const manualKey = localStorage.getItem('user_gemini_key');
@@ -39,7 +44,7 @@ const handleApiError = (error: any) => {
 export const generateDailyPrediction = async (lang: Language): Promise<string> => {
   try {
     const ai = getAIClient();
-    const prompt = `${CURRENT_DATE_CONTEXT}\n${getLanguageInstruction(lang)}\nProvide a detailed daily horoscope (Rashifal) for all zodiac signs today. Include 'What to do today' and 'What to expect today'. Use Markdown.`;
+    const prompt = `${getCurrentDateContext()}\n${getLanguageInstruction(lang)}\nProvide a detailed daily horoscope (Rashifal) for all zodiac signs today. Include 'What to do today' and 'What to expect today'. Use Markdown.`;
     const response = await ai.models.generateContent({ model: KUNDALI_MODEL, contents: prompt });
     return response.text ?? "Unable to fetch prediction.";
   } catch (e) { return "Daily prediction limit reached. Try again later."; }
@@ -51,7 +56,7 @@ export const analyzePalm = async (imageBase64: string, mimeType: string, lang: L
     const contents = {
       parts: [
         { inlineData: { data: imageBase64, mimeType: mimeType } },
-        { text: `${CURRENT_DATE_CONTEXT}\n${getLanguageInstruction(lang)}\nAnalyze this palm image. Provide reading. Use Markdown.` }
+        { text: `${getCurrentDateContext()}\n${getLanguageInstruction(lang)}\nAnalyze this palm image. Provide reading. Use Markdown.` }
       ]
     };
     const response = await ai.models.generateContent({ model: PALMISTRY_MODEL, contents });
@@ -62,7 +67,7 @@ export const analyzePalm = async (imageBase64: string, mimeType: string, lang: L
 export const generateKundali = async (details: KundaliDetails, lang: Language): Promise<string> => {
   try {
     const ai = getAIClient();
-    const prompt = `${CURRENT_DATE_CONTEXT}\n${getLanguageInstruction(lang)}\nDetailed Kundali analysis for ${details.name}, born ${details.dob} at ${details.tob} in ${details.pob}. Use Markdown.`;
+    const prompt = `${getCurrentDateContext()}\n${getLanguageInstruction(lang)}\nDetailed Kundali analysis for ${details.name}, born ${details.dob} at ${details.tob} in ${details.pob}. Use Markdown.`;
     const response = await ai.models.generateContent({ model: KUNDALI_MODEL, contents: prompt });
     return response.text ?? "No response.";
   } catch (error) { return handleApiError(error); }
@@ -71,7 +76,7 @@ export const generateKundali = async (details: KundaliDetails, lang: Language): 
 export const generateBnnAnalysis = async (details: KundaliDetails, lang: Language): Promise<string> => {
   try {
     const ai = getAIClient();
-    const prompt = `${CURRENT_DATE_CONTEXT}\n${getLanguageInstruction(lang)}\nBNN Career analysis for ${details.name}. Use Markdown.`;
+    const prompt = `${getCurrentDateContext()}\n${getLanguageInstruction(lang)}\nBNN Career analysis for ${details.name}. Use Markdown.`;
     const response = await ai.models.generateContent({ model: BNN_MODEL, contents: prompt });
     return response.text ?? "No response.";
   } catch (error) { return handleApiError(error); }
@@ -80,7 +85,7 @@ export const generateBnnAnalysis = async (details: KundaliDetails, lang: Languag
 export const generateMahaKundali = async (details: MahaKundaliDetails, lang: Language): Promise<string> => {
   try {
     const ai = getAIClient();
-    const prompt = `${CURRENT_DATE_CONTEXT}\n${getLanguageInstruction(lang)}\nProvide a deep Maha Kundali analysis for ${details.name}. Gender: ${details.gender}, Born: ${details.dob} ${details.tob} in ${details.pob}. Use Markdown.`;
+    const prompt = `${getCurrentDateContext()}\n${getLanguageInstruction(lang)}\nProvide a deep Maha Kundali analysis for ${details.name}. Gender: ${details.gender}, Born: ${details.dob} ${details.tob} in ${details.pob}. Use Markdown.`;
     const response = await ai.models.generateContent({ model: MAHA_KUNDALI_MODEL, contents: prompt });
     return response.text ?? "Failed.";
   } catch (error) { return handleApiError(error); }
@@ -102,7 +107,7 @@ export const chatWithAnalysis = async (analysisContext: string, question: string
     const ai = getAIClient();
     const response = await ai.models.generateContent({
       model: CHAT_MODEL,
-      contents: `Context: ${analysisContext}\n\n${CURRENT_DATE_CONTEXT}\n${getLanguageInstruction(lang)}\nQuestion: ${question}`
+      contents: `Context: ${analysisContext}\n\n${getCurrentDateContext()}\n${getLanguageInstruction(lang)}\nQuestion: ${question}`
     });
     return response.text ?? "No answer.";
   } catch (error) { return handleApiError(error); }
@@ -113,7 +118,7 @@ export const chatWithMahaKundali = async (kundaliContext: string, question: stri
     const ai = getAIClient();
     const response = await ai.models.generateContent({
       model: MAHA_KUNDALI_MODEL,
-      contents: `Context: ${kundaliContext}\n\n${CURRENT_DATE_CONTEXT}\n${getLanguageInstruction(lang)}\nQuestion: ${question}`
+      contents: `Context: ${kundaliContext}\n\n${getCurrentDateContext()}\n${getLanguageInstruction(lang)}\nQuestion: ${question}`
     });
     return response.text ?? "No answer.";
   } catch (error) { return handleApiError(error); }
