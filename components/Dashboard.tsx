@@ -59,68 +59,68 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNewSection, onViewHistor
   };
 
   const menuItems = [
-    { id: 'palmistry' as Section, label: 'Hast Rekha Reading', icon: <PalmIcon />, color: 'bg-blue-500' },
+    { id: 'palmistry' as Section, label: 'Hast Rekha', icon: <PalmIcon />, color: 'bg-blue-500' },
     { id: 'kundali' as Section, label: 'Janam Kundali', icon: <StarIcon />, color: 'bg-purple-500' },
     { id: 'bnn' as Section, label: 'Career (BNN)', icon: <CareerIcon />, color: 'bg-green-500' },
     { id: 'mahaKundali' as Section, label: 'Maha Kundali', icon: <MahaKundaliIcon />, color: 'bg-orange-500' },
   ];
 
   return (
-    <div className="w-full space-y-12 animate-fade-in">
+    <div className="w-full space-y-8 sm:space-y-12 animate-fade-in px-2">
       <div>
-        <h2 className="text-3xl font-bold font-hindi mb-6 flex items-center gap-3">
-          <span className="text-indigo-400">✨</span> Naya Vishleshan Karein
+        <h2 className="text-xl sm:text-3xl font-bold font-hindi mb-4 sm:mb-6 flex items-center gap-2">
+          <span className="text-indigo-400">✨</span> Naya Vishleshan
         </h2>
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           {menuItems.map((item) => (
             <button
               key={item.id}
               onClick={() => onNewSection(item.id)}
-              className="flex flex-col items-center justify-center p-6 bg-slate-800 border border-slate-700 rounded-2xl hover:bg-slate-750 hover:border-indigo-500 transition-all group"
+              className="flex flex-col items-center justify-center p-4 sm:p-6 bg-slate-800 border border-slate-700 rounded-2xl hover:bg-slate-750 hover:border-indigo-500 transition-all group"
             >
-              <div className={`p-4 rounded-xl ${item.color} bg-opacity-20 text-white mb-4 group-hover:scale-110 transition-transform`}>
-                {item.icon}
+              <div className={`p-3 sm:p-4 rounded-xl ${item.color} bg-opacity-20 text-white mb-3 sm:mb-4 group-hover:scale-110 transition-transform`}>
+                {React.cloneElement(item.icon as any, { size: 20 })}
               </div>
-              <span className="font-bold text-slate-200 text-sm sm:text-base">{item.label}</span>
+              <span className="font-bold text-slate-200 text-xs sm:text-base text-center leading-tight">{item.label}</span>
             </button>
           ))}
         </div>
       </div>
 
       <div>
-        <h2 className="text-3xl font-bold font-hindi mb-6 flex items-center gap-3">
-          <span className="text-indigo-400">📜</span> Pichli Reports (History)
+        <h2 className="text-xl sm:text-3xl font-bold font-hindi mb-4 sm:mb-6 flex items-center gap-2">
+          <span className="text-indigo-400">📜</span> Pichli Reports
         </h2>
         {isLoading ? (
-          <div className="flex justify-center p-12"><div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div></div>
+          <div className="flex justify-center p-8 sm:p-12"><div className="w-6 h-6 sm:w-8 sm:h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div></div>
         ) : error ? (
-            <div className="bg-red-500/10 border border-red-500/30 p-4 rounded-xl text-red-400 text-sm italic">
+            <div className="bg-red-500/10 border border-red-500/30 p-3 sm:p-4 rounded-xl text-red-400 text-xs sm:text-sm italic text-center">
                 {error}
             </div>
         ) : history.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
             {history.map((item) => (
               <div 
                 key={item.id}
                 onClick={() => onViewHistory(item.title, item.content)}
-                className="bg-slate-800/50 border border-slate-700 p-4 rounded-xl hover:bg-slate-800 transition-all cursor-pointer flex justify-between items-center group"
+                className="bg-slate-800/50 border border-slate-700 p-3 sm:p-4 rounded-xl hover:bg-slate-800 transition-all cursor-pointer flex justify-between items-center group"
               >
-                <div>
-                  <h4 className="font-bold text-slate-200 text-sm">{item.title}</h4>
-                  <p className="text-[10px] text-slate-500">Report Date: {item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleDateString() : 'Saving...'}</p>
+                <div className="overflow-hidden">
+                  <h4 className="font-bold text-slate-200 text-xs sm:text-sm truncate">{item.title}</h4>
+                  <p className="text-[8px] sm:text-[10px] text-slate-500">{item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleDateString() : 'Saving...'}</p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <button onClick={(e) => handleDeleteHistory(e, item.id)} className="p-2 text-slate-600 hover:text-red-500 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+                  <button onClick={(e) => handleDeleteHistory(e, item.id)} className="p-1.5 sm:p-2 text-slate-600 hover:text-red-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
                   </button>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-slate-600 group-hover:text-indigo-400"><path d="m9 18 6-6-6-6"/></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-slate-600 group-hover:text-indigo-400"><path d="m9 18 6-6-6-6"/></svg>
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <div className="bg-slate-800/30 border border-dashed border-slate-700 p-12 rounded-2xl text-center">
-            <p className="text-slate-500 italic font-hindi">Abhi tak koi report save nahi hui hai.</p>
+          <div className="bg-slate-800/30 border border-dashed border-slate-700 p-8 sm:p-12 rounded-2xl text-center">
+            <p className="text-slate-500 italic font-hindi text-sm">Abhi tak koi report save nahi hui hai.</p>
           </div>
         )}
       </div>

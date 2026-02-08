@@ -2,12 +2,13 @@
 import { GoogleGenAI } from "@google/genai";
 import type { KundaliDetails, MahaKundaliDetails, Language } from '../types';
 
+// Switching everything to Flash for APK stability and high rate limits
 const PALMISTRY_MODEL = 'gemini-3-flash-preview';
 const KUNDALI_MODEL = 'gemini-3-flash-preview';
-const BNN_MODEL = 'gemini-3-pro-preview';
+const BNN_MODEL = 'gemini-3-flash-preview';
 const SUMMARY_MODEL = 'gemini-3-flash-preview';
 const CHAT_MODEL = 'gemini-3-flash-preview';
-const MAHA_KUNDALI_MODEL = 'gemini-3-pro-preview';
+const MAHA_KUNDALI_MODEL = 'gemini-3-flash-preview';
 
 const CURRENT_DATE_CONTEXT = "Current Date: February 7, 2026. Always treat the current year as 2026.";
 
@@ -30,9 +31,9 @@ const getLanguageInstruction = (lang: Language) => {
 const handleApiError = (error: any) => {
   console.error("API Error:", error);
   if (error?.status === 429 || error?.message?.includes('429')) {
-    return `⚠️ LIMIT KHATAM! Kripya Settings mein nayi API Key dalein.`;
+    return `⚠️ LIMIT REACHED! Aapki API Key ki limit khatam ho gayi hai. Settings mein check karein.`;
   }
-  return "Ek error aa gaya hai. Kripya check karein ki aapka API key sahi hai.";
+  return "Ek error aa gaya hai. Kripya check karein ki aapka API key sahi hai aur internet chal raha hai.";
 };
 
 export const generateDailyPrediction = async (lang: Language): Promise<string> => {

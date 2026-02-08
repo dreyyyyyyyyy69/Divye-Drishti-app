@@ -23,7 +23,7 @@ const MaskedInputField: React.FC<{
 
   return (
     <div className="relative">
-      <label htmlFor={name} className="block text-sm font-medium text-slate-400 font-hindi mb-1">{label}</label>
+      <label htmlFor={name} className="block text-xs font-medium text-slate-400 font-hindi mb-1">{label}</label>
       <div className="relative">
         <input
           type={isSensitive && isMasked ? 'password' : type}
@@ -32,14 +32,14 @@ const MaskedInputField: React.FC<{
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className={`block w-full bg-slate-900 border border-slate-700 rounded-xl py-2.5 px-4 text-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all ${isSensitive && isMasked ? 'tracking-[0.5em]' : ''}`}
+          className={`block w-full bg-slate-900 border border-slate-700 rounded-xl py-2 px-3 text-sm text-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all ${isSensitive && isMasked ? 'tracking-[0.4em]' : ''}`}
           required
         />
         {isSensitive && (
           <button 
             type="button"
             onClick={() => setIsMasked(!isMasked)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] bg-slate-700 px-2 py-1 rounded text-slate-300 font-bold uppercase"
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-[8px] bg-slate-700 px-1.5 py-0.5 rounded text-slate-300 font-bold uppercase"
           >
             {isMasked ? 'Show' : 'Hide'}
           </button>
@@ -80,7 +80,7 @@ export const MahaKundali: React.FC<MahaKundaliProps> = ({ onBack, language }) =>
   };
 
   const handleSaveChartAsProfile = async () => {
-    if (!details.name || !details.dob) { alert("Pehle jankari bharein!"); return; }
+    if (!details.name || !details.dob) { alert("Details bharein!"); return; }
     if (!auth.currentUser) return;
     try {
         await addDoc(collection(db, "userCharts"), {
@@ -88,9 +88,9 @@ export const MahaKundali: React.FC<MahaKundaliProps> = ({ onBack, language }) =>
             ...details,
             createdAt: serverTimestamp()
         });
-        alert("Naya profile save ho gaya!");
+        alert("Profile save ho gaya!");
         fetchSavedCharts();
-    } catch (e) { alert("Save nahi ho paya."); }
+    } catch (e) { alert("Save failed."); }
   };
 
   const selectChart = (chart: SavedChart) => {
@@ -100,7 +100,7 @@ export const MahaKundali: React.FC<MahaKundaliProps> = ({ onBack, language }) =>
 
   const deleteChart = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!window.confirm("Is profile ko delete karein?")) return;
+    if (!window.confirm("Delete karein?")) return;
     try {
         await deleteDoc(doc(db, "userCharts", id));
         setSavedCharts(savedCharts.filter(c => c.id !== id));
@@ -117,51 +117,51 @@ export const MahaKundali: React.FC<MahaKundaliProps> = ({ onBack, language }) =>
     try {
       const analysis = await generateMahaKundali(details, language);
       setResult(analysis);
-      setChatHistory([{ role: 'model', text: language === 'english' ? 'Maha Kundali is ready. You can ask questions.' : 'Maha Kundali taiyar hai. Sawaal poochein.' }]);
-    } catch (err) { setError('Error generating Kundali.'); }
+      setChatHistory([{ role: 'model', text: 'Maha Kundali taiyar hai. Sawaal poochein.' }]);
+    } catch (err) { setError('Error generating analysis.'); }
     finally { setIsLoading(false); }
   };
 
   return (
-    <div className="flex flex-col items-center gap-6 animate-fade-in pb-20">
-      <div className="w-full p-8 bg-slate-800/80 rounded-3xl border border-slate-700 shadow-2xl relative">
+    <div className="flex flex-col items-center gap-4 sm:gap-6 animate-fade-in pb-20 px-2">
+      <div className="w-full p-5 sm:p-8 bg-slate-800/80 rounded-3xl border border-slate-700 shadow-2xl relative overflow-hidden">
         <button 
             onClick={() => { setShowProfileModal(true); fetchSavedCharts(); }} 
-            className="absolute top-6 right-8 text-[10px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 px-4 py-1.5 rounded-full hover:bg-indigo-600 hover:text-white transition-all font-bold"
+            className="absolute top-4 right-4 text-[8px] sm:text-[10px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 px-3 py-1 rounded-full hover:bg-indigo-600 hover:text-white transition-all font-bold z-10"
         >
-            👤 Use Saved Profiles
+            👤 Profile
         </button>
         
-        <div className="flex justify-between items-center mb-8">
-          <button onClick={onBack} className="text-sm text-indigo-400 font-bold hover:underline">← Home</button>
-          <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-500 font-hindi">Maha Kundali</h2>
-          <div className="w-10"></div>
+        <div className="flex justify-between items-center mb-6">
+          <button onClick={onBack} className="text-xs sm:text-sm text-indigo-400 font-bold hover:underline">← Home</button>
+          <h2 className="text-xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-500 font-hindi">Maha Kundali</h2>
+          <div className="w-8 sm:w-10"></div>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
             <MaskedInputField label="Aapka Naam" name="name" value={details.name} onChange={handleChange} placeholder="Anish Kumar" />
             <div>
-              <label className="block text-sm font-medium text-slate-400 font-hindi mb-1">Ling (Gender)</label>
-              <select name="gender" value={details.gender} onChange={handleChange} className="block w-full bg-slate-900 border border-slate-700 rounded-xl py-2.5 px-4 text-slate-200 outline-none" required>
+              <label className="block text-xs font-medium text-slate-400 font-hindi mb-1">Ling (Gender)</label>
+              <select name="gender" value={details.gender} onChange={handleChange} className="block w-full bg-slate-900 border border-slate-700 rounded-xl py-2 px-3 text-sm text-slate-200 outline-none" required>
                 <option value="">Chunein...</option>
-                <option value="male">Purush (Male)</option>
-                <option value="female">Mahila (Female)</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
               </select>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
             <MaskedInputField label="Janam Tarikh" name="dob" value={details.dob} onChange={handleChange} type="date" />
             <MaskedInputField label="Janam Samay" name="tob" value={details.tob} onChange={handleChange} type="time" />
           </div>
-          <MaskedInputField label="Janam Sthan (City)" name="pob" value={details.pob} onChange={handleChange} placeholder="Bokaro, Jharkhand" />
+          <MaskedInputField label="City" name="pob" value={details.pob} onChange={handleChange} placeholder="Bokaro, Jharkhand" />
           
           <div className="flex gap-2">
-            <button type="submit" disabled={isLoading} className="flex-1 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white font-bold py-4 rounded-2xl shadow-xl transition-all disabled:opacity-50">
-                {isLoading ? <Spinner /> : 'Maha Kundali Banayein'}
+            <button type="submit" disabled={isLoading} className="flex-1 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white font-bold py-3 sm:py-4 rounded-2xl shadow-xl transition-all disabled:opacity-50 text-sm">
+                {isLoading ? <Spinner /> : 'Banayein'}
             </button>
-            <button type="button" onClick={handleSaveChartAsProfile} className="bg-slate-700 hover:bg-slate-600 px-6 rounded-2xl text-slate-300 font-bold text-xs">
-                Save Profile
+            <button type="button" onClick={handleSaveChartAsProfile} className="bg-slate-700 hover:bg-slate-600 px-4 sm:px-6 rounded-2xl text-slate-300 font-bold text-[10px]">
+                Save
             </button>
           </div>
         </form>
@@ -171,16 +171,15 @@ export const MahaKundali: React.FC<MahaKundaliProps> = ({ onBack, language }) =>
         <div className="fixed inset-0 z-[200] bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
             <div className="bg-slate-800 border border-slate-700 w-full max-w-md rounded-3xl p-6 shadow-2xl relative animate-fade-in">
                 <button onClick={() => setShowProfileModal(false)} className="absolute top-4 right-4 text-slate-500 hover:text-white">X</button>
-                <h3 className="text-xl font-bold text-indigo-400 mb-6 font-hindi">Mere Saved Profiles</h3>
-                <p className="text-[10px] text-slate-500 mb-4 uppercase tracking-tighter">Privacy: Sirf naam dikhaye ja rahe hain.</p>
-                {isProfileLoading ? <div className="p-12 flex justify-center"><Spinner /></div> : (
-                    <div className="space-y-3 max-h-96 overflow-y-auto pr-1">
-                        {savedCharts.length === 0 ? <p className="text-slate-500 italic text-center py-4">Koi profile nahi mila.</p> : 
+                <h3 className="text-lg font-bold text-indigo-400 mb-4 font-hindi">Mere Saved Profiles</h3>
+                {isProfileLoading ? <div className="p-8 flex justify-center"><Spinner /></div> : (
+                    <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
+                        {savedCharts.length === 0 ? <p className="text-slate-500 italic text-center py-4 text-sm">Empty.</p> : 
                             savedCharts.map(c => (
-                                <div key={c.id} onClick={() => selectChart(c)} className="bg-slate-900/50 border border-slate-700 p-4 rounded-2xl hover:bg-indigo-500/10 cursor-pointer flex justify-between items-center group transition-all">
-                                    <p className="font-bold text-slate-200">{c.name}</p>
+                                <div key={c.id} onClick={() => selectChart(c)} className="bg-slate-900/50 border border-slate-700 p-3 rounded-xl hover:bg-indigo-500/10 cursor-pointer flex justify-between items-center transition-all">
+                                    <p className="font-bold text-slate-200 text-sm">{c.name}</p>
                                     <button onClick={(e) => deleteChart(c.id, e)} className="text-slate-700 hover:text-red-500 transition-colors">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
                                     </button>
                                 </div>
                             ))
@@ -192,13 +191,13 @@ export const MahaKundali: React.FC<MahaKundaliProps> = ({ onBack, language }) =>
       )}
 
       {result && (
-        <div className="w-full space-y-6">
-          <div className="relative p-8 bg-slate-800 border-2 border-amber-500/30 rounded-3xl shadow-2xl">
-            <h3 className="text-2xl font-bold text-amber-400 font-hindi mb-6 border-b border-slate-700 pb-2">Sampoorn Analysis</h3>
-            <div className="prose prose-invert max-w-none text-slate-300" dangerouslySetInnerHTML={{ __html: marked.parse(result) as string }} />
+        <div className="w-full space-y-4 sm:space-y-6">
+          <div className="relative p-5 sm:p-8 bg-slate-800 border-2 border-amber-500/30 rounded-3xl shadow-2xl overflow-hidden">
+            <h3 className="text-xl sm:text-2xl font-bold text-amber-400 font-hindi mb-4 border-b border-slate-700 pb-2">Analysis</h3>
+            <div className="prose prose-invert max-w-none text-slate-300 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: marked.parse(result) as string }} />
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <ChatBot history={chatHistory} onSend={(m) => chatWithMahaKundali(result, m, language).then(r => setChatHistory([...chatHistory, {role:'user', text:m}, {role:'model', text:r}]))} isLoading={isChatting} title="Poochiye Guru se" />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+            <ChatBot history={chatHistory} onSend={(m) => chatWithMahaKundali(result, m, language).then(r => setChatHistory([...chatHistory, {role:'user', text:m}, {role:'model', text:r}]))} isLoading={isChatting} title="Guru Se Poochein" />
             <AIGuru context={result} />
           </div>
         </div>

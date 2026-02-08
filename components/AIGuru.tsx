@@ -20,7 +20,8 @@ const fileToBase64 = (file: File): Promise<{base64: string, mimeType: string}> =
     });
 };
 
-const AI_GURU_MODEL = 'gemini-3-pro-preview';
+// Switched to Flash for better performance and reliability in APK
+const AI_GURU_MODEL = 'gemini-3-flash-preview';
 
 interface AIGuruProps {
     context: string;
@@ -76,9 +77,7 @@ export const AIGuru: React.FC<AIGuruProps> = ({ context }) => {
         setChatHistory(prev => [...prev, userMessage]);
 
         try {
-            // Refresh client for every message to handle key changes
             const key = getActiveApiKey();
-            const ai = new GoogleGenAI({ apiKey: key });
             if (!chatSession.current) {
                 initChat();
             }
@@ -97,7 +96,7 @@ export const AIGuru: React.FC<AIGuruProps> = ({ context }) => {
             console.error("Guru Error:", err);
             let errMsg = 'Baat-cheet mein kuch samasya aa gayi hai.';
             if (err?.status === 429 || err?.message?.includes('429')) {
-                errMsg = "⚠️ LIMIT KHATAM! Kripya upar Setting box mein nayi API Key dalein.";
+                errMsg = "⚠️ LIMIT REACHED! Nayi API Key check karein.";
             }
             setChatHistory(prev => [...prev, { role: 'model', text: errMsg }]);
         } finally {
@@ -110,8 +109,8 @@ export const AIGuru: React.FC<AIGuruProps> = ({ context }) => {
             history={chatHistory}
             onSend={handleSendMessage}
             isLoading={isLoading}
-            title="Poochiye AI Guru se"
-            placeholder="Koi bhi sawaal poochein..."
+            title="AI Guru Support"
+            placeholder="Kuch bhi poochein..."
         />
     );
 };
